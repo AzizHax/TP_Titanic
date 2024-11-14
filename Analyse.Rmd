@@ -1,0 +1,156 @@
+---
+title: "Analyse"
+output: html_document
+date: "2024-11-14"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(carData)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+# Introduction
+
+Cette analyse porte sur le célèbre dataset du Titanic, qui contient des informations sur les passagers et leur survie lors du naufrage du Titanic.
+
+## Chargement et présentation des données
+
+```{r load_data}
+data(TitanicSurvival)
+# Aperçu des données
+head(TitanicSurvival)
+# Structure des données
+str(TitanicSurvival)
+```
+
+## Statistiques descriptives
+
+```{r desc_stats}
+# Résumé général des données
+summary(TitanicSurvival)
+
+# Table de survie avec pourcentages
+table_survie <- table(TitanicSurvival$survived)
+survie_pct <- prop.table(table_survie) * 100
+survie_df <- data.frame(
+  Survie = names(table_survie),
+  Nombre = as.vector(table_survie),
+  Pourcentage = sprintf("%.1f%%", as.vector(survie_pct))
+)
+kable(survie_df, caption = "Répartition des survivants")
+
+# Table de survie par sexe avec pourcentages
+table_sexe_survie <- table(TitanicSurvival$sex, TitanicSurvival$survived)
+sexe_survie_pct <- prop.table(table_sexe_survie, margin = 1) * 100
+sexe_survie_df <- data.frame(
+  Sexe = rownames(table_sexe_survie),
+  Non_survivors = paste0(table_sexe_survie[,1], " (", sprintf("%.1f%%", sexe_survie_pct[,1]), ")"),
+  Survivors = paste0(table_sexe_survie[,2], " (", sprintf("%.1f%%", sexe_survie_pct[,2]), ")")
+)
+kable(sexe_survie_df, caption = "Survie selon le sexe (Effectif et Pourcentage par ligne)")
+
+# Table de survie par classe avec pourcentages
+table_classe_survie <- table(TitanicSurvival$passengerClass, TitanicSurvival$survived)
+classe_survie_pct <- prop.table(table_classe_survie, margin = 1) * 100
+classe_survie_df <- data.frame(
+  Classe = rownames(table_classe_survie),
+  Non_survivors = paste0(table_classe_survie[,1], " (", sprintf("%.1f%%", classe_survie_pct[,1]), ")"),
+  Survivors = paste0(table_classe_survie[,2], " (", sprintf("%.1f%%", classe_survie_pct[,2]), ")")
+)
+kable(classe_survie_df, caption = "Survie selon la classe (Effectif et Pourcentage par ligne)")
+
+# Ajout des totaux par classe
+classe_total <- data.frame(
+  Classe = names(table(TitanicSurvival$passengerClass)),
+  Total = as.vector(table(TitanicSurvival$passengerClass)),
+  Pourcentage = sprintf("%.1f%%", prop.table(table(TitanicSurvival$passengerClass)) * 100)
+)
+kable(classe_total, caption = "Répartition totale par classe")
+
+# Ajout des totaux par sexe
+sexe_total <- data.frame(
+  Sexe = names(table(TitanicSurvival$sex)),
+  Total = as.vector(table(TitanicSurvival$sex)),
+  Pourcentage = sprintf("%.1f%%", prop.table(table(TitanicSurvival$sex)) * 100)
+)
+kable(sexe_total, caption = "Répartition totale par sexe")
+```
+
+## Visualisations
+
+### Répartition des survivants selon le sexe et l'âge
+
+```{r viz_sex_age}
+ggplot(TitanicSurvival, aes(x = passengerClass, fill = survived)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Survival by class and sex",
+       x = "Class",
+       y = "Number of passangers") +
+  theme_minimal() +
+  facet_wrap(~ sex) +
+   theme(
+    plot.title = element_text(hjust = 0.5)  
+  ) 
+
+```
+
+
+
+Le graphique met en évidence des inégalités marquées dans les chances de survie lors du naufrage du Titanic. Ces inégalités sont liées à deux facteurs principaux :La classe sociale : Les passagers de première classe étaient privilégiés dans l'accès aux sauvetages.Le sexe : Les femmes étaient prioritaires par rapport aux hommes.En conclusion, ce graphique illustre de manière pertinente les conséquences sociales et de genre du naufrage du Titanic. Il souligne l'importance de prendre en compte ces facteurs dans l'analyse de catastrophes historiques.
+
+
+
+### Distribution de l'âge selon la survie
+
+```{r viz_age}
+ggplot(TitanicSurvival, aes(x = survived, y = age, fill = survived)) +
+  geom_violin(trim = FALSE, alpha = 0.5) +  
+  geom_boxplot(width = 0.1, color = "black", alpha = 0.7) +  
+  labs(
+    title = "Age Distribution by Survival Status",
+    x = "Survival",
+    y = "Age"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("yes" = "#A8E6A3", "no" = "#4F83CC")) +  
+  guides(fill = "none") +
+   theme(
+    plot.title = element_text(hjust = 0.5)  
+  )
+
+```
+
+
+
+Ce graphique suggère que les personnes plus âgées avaient légèrement plus de chances de survivre au naufrage du Titanic. Cette observation peut sembler contre-intuitive au premier abord, étant donné la politique de femmes et enfants d'abord. Cependant, plusieurs facteurs peuvent expliquer ce résultat :Placement dans le navire : Les personnes âgées, souvent plus aisées, occupaient peut-être des cabines situées dans des zones du navire qui étaient moins rapidement inondées.Assistance : Elles pouvaient bénéficier d'une assistance plus rapide de la part du personnel du navire ou d'autres passagers.Décisions personnelles : Certaines personnes âgées, conscientes des risques, ont peut-être pris des décisions plus rapides et plus efficaces pour se mettre en sécurité.En conclusion, ce graphique nous apporte un éclairage supplémentaire sur les facteurs ayant influencé la survie lors du naufrage du Titanic. Il souligne la complexité de cet événement et l'importance d'une analyse multifactorielle pour comprendre les mécanismes à l'œuvre.
+## Analyse statistique (Facultatif)
+
+
+
+```{r analysis}
+# Modèle logistique pour expliquer la survie
+model <- glm(survived ~ sex + passengerClass + age, 
+             data = TitanicSurvival, 
+             family = binomial)
+
+# Résumé du modèle
+summary(model)
+```
+
+# Conclusions
+
+Les analyses précédentes montrent que :
+
+- Le sexe était un facteur déterminant dans la survie
+
+- La classe des passagers avait également une influence importante
+
+- L'âge semble avoir eu un impact moins marqué
+
+# Session Info
+
+```{r session_info}
+sessionInfo()
+```
