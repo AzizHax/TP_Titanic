@@ -1,0 +1,10 @@
+---
+title: "Analyse du Titanic"
+author: "Votre Nom"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Charger les librairies nécessaires
+library(carData)
+library(ggplot2)
