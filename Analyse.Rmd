@@ -10,6 +10,7 @@ library(carData)
 library(dplyr)
 library(ggplot2)
 library(knitr)
+
 ```
 # Introduction
 
@@ -93,7 +94,6 @@ ggplot(TitanicSurvival, aes(x = passengerClass, fill = survived)) +
    theme(
     plot.title = element_text(hjust = 0.5)  
   ) 
-<<<<<<< HEAD
 
 ```
 
@@ -110,7 +110,6 @@ Le graphique met en évidence des inégalités marquées dans les chances de sur
 
   theme_minimal()
 ```
->>>>>>> b674affe379a27cb52e53fd1fe180e133f232817
 
 ### Distribution de l'âge selon la survie
 
@@ -132,8 +131,6 @@ ggplot(TitanicSurvival, aes(x = survived, y = age, fill = survived)) +
 
 ```
 
-<<<<<<< HEAD
-
 
 Ce graphique suggère que les personnes plus âgées avaient légèrement plus de chances de survivre au naufrage du Titanic. Cette observation peut sembler contre-intuitive au premier abord, étant donné la politique de femmes et enfants d'abord. Cependant, plusieurs facteurs peuvent expliquer ce résultat :Placement dans le navire : Les personnes âgées, souvent plus aisées, occupaient peut-être des cabines situées dans des zones du navire qui étaient moins rapidement inondées.Assistance : Elles pouvaient bénéficier d'une assistance plus rapide de la part du personnel du navire ou d'autres passagers.Décisions personnelles : Certaines personnes âgées, conscientes des risques, ont peut-être pris des décisions plus rapides et plus efficaces pour se mettre en sécurité.En conclusion, ce graphique nous apporte un éclairage supplémentaire sur les facteurs ayant influencé la survie lors du naufrage du Titanic. Il souligne la complexité de cet événement et l'importance d'une analyse multifactorielle pour comprendre les mécanismes à l'œuvre.
 ## Analyse statistique (Facultatif)
@@ -143,7 +140,7 @@ Ce graphique suggère que les personnes plus âgées avaient légèrement plus d
 =======
 ## Analyse statistique (Facultatif)
 
->>>>>>> b674affe379a27cb52e53fd1fe180e133f232817
+
 ```{r analysis}
 # Modèle logistique pour expliquer la survie
 model <- glm(survived ~ sex + passengerClass + age, 
@@ -157,24 +154,27 @@ summary(model)
 # Conclusions
 
 Les analyses précédentes montrent que :
-<<<<<<< HEAD
+
 
 - Le sexe était un facteur déterminant dans la survie
 
 - La classe des passagers avait également une influence importante
 
-=======
-- Le sexe était un facteur déterminant dans la survie
-- La classe des passagers avait également une influence importante
->>>>>>> b674affe379a27cb52e53fd1fe180e133f232817
-- L'âge semble avoir eu un impact moins marqué
 
-# Session Info
+# Test Fonction
 
-```{r session_info}
-sessionInfo()
-<<<<<<< HEAD
+```{r fonction}
+library(TitanicPackage)
+library(dplyr)
+library(carData)
+
+data("TitanicSurvival")
+
+taux_survie_classe <- calculate_survival_rate_by_class(TitanicSurvival)
+
+print(taux_survie_classe)
+
+taux_survie_sexe <- calculate_survival_rate_by_sex(TitanicSurvival)
+
+print(taux_survie_sexe)
 ```
-=======
-```
->>>>>>> b674affe379a27cb52e53fd1fe180e133f232817

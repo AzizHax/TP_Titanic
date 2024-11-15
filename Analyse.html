@@ -579,6 +579,12 @@ femmes étaient prioritaires par rapport aux hommes.En conclusion, ce
 graphique illustre de manière pertinente les conséquences sociales et de
 genre du naufrage du Titanic. Il souligne l’importance de prendre en
 compte ces facteurs dans l’analyse de catastrophes historiques.</p>
+<p>=======</p>
+<pre><code>
+### Répartition des survivants selon la classe
+
+
+  theme_minimal()</code></pre>
 </div>
 <div id="distribution-de-lâge-selon-la-survie" class="section level3">
 <h3>Distribution de l’âge selon la survie</h3>
@@ -617,6 +623,7 @@ supplémentaire sur les facteurs ayant influencé la survie lors du
 naufrage du Titanic. Il souligne la complexité de cet événement et
 l’importance d’une analyse multifactorielle pour comprendre les
 mécanismes à l’œuvre. ## Analyse statistique (Facultatif)</p>
+<p>======= ## Analyse statistique (Facultatif)</p>
 <pre class="r"><code># Modèle logistique pour expliquer la survie
 model &lt;- glm(survived ~ sex + passengerClass + age, 
              data = TitanicSurvival, 
@@ -652,45 +659,38 @@ summary(model)</code></pre>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
-<p>Les analyses précédentes montrent que : - Le sexe était un facteur
-déterminant dans la survie - La classe des passagers avait également une
-influence importante - L’âge semble avoir eu un impact moins marqué</p>
+<p>Les analyses précédentes montrent que :</p>
+<ul>
+<li><p>Le sexe était un facteur déterminant dans la survie</p></li>
+<li><p>La classe des passagers avait également une influence
+importante</p></li>
+</ul>
 </div>
-<div id="session-info" class="section level1">
-<h1>Session Info</h1>
-<pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 4.3.3 (2024-02-29 ucrt)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 10 x64 (build 19045)
-## 
-## Matrix products: default
-## 
-## 
-## locale:
-## [1] LC_COLLATE=French_France.utf8  LC_CTYPE=French_France.utf8   
-## [3] LC_MONETARY=French_France.utf8 LC_NUMERIC=C                  
-## [5] LC_TIME=French_France.utf8    
-## 
-## time zone: Europe/Paris
-## tzcode source: internal
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## other attached packages:
-## [1] knitr_1.49    ggplot2_3.5.1 dplyr_1.1.4   carData_3.0-5
-## 
-## loaded via a namespace (and not attached):
-##  [1] vctrs_0.6.5       cli_3.6.3         rlang_1.1.4       xfun_0.49        
-##  [5] generics_0.1.3    jsonlite_1.8.8    labeling_0.4.3    glue_1.7.0       
-##  [9] colorspace_2.1-1  htmltools_0.5.8.1 sass_0.4.9        scales_1.3.0     
-## [13] fansi_1.0.6       rmarkdown_2.29    grid_4.3.3        munsell_0.5.1    
-## [17] evaluate_0.24.0   jquerylib_0.1.4   tibble_3.2.1      fastmap_1.2.0    
-## [21] yaml_2.3.10       lifecycle_1.0.4   compiler_4.3.3    pkgconfig_2.0.3  
-## [25] rstudioapi_0.17.1 farver_2.1.2      digest_0.6.37     R6_2.5.1         
-## [29] tidyselect_1.2.1  utf8_1.2.4        pillar_1.9.0      magrittr_2.0.3   
-## [33] bslib_0.8.0       withr_3.0.1       gtable_0.3.6      tools_4.3.3      
-## [37] cachem_1.1.0</code></pre>
+<div id="test-fonction" class="section level1">
+<h1>Test Fonction</h1>
+<pre class="r"><code>library(TitanicPackage)
+library(dplyr)
+library(carData)
+
+data(&quot;TitanicSurvival&quot;)
+
+taux_survie_classe &lt;- calculate_survival_rate_by_class(TitanicSurvival)
+
+print(taux_survie_classe)</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   passengerClass total survived survival_rate
+##   &lt;fct&gt;          &lt;int&gt;    &lt;dbl&gt;         &lt;dbl&gt;
+## 1 1st              323      200          61.9
+## 2 2nd              277      119          43.0
+## 3 3rd              709      181          25.5</code></pre>
+<pre class="r"><code>taux_survie_sexe &lt;- calculate_survival_rate_by_sex(TitanicSurvival)
+
+print(taux_survie_sexe)</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   sex    total survived survival_rate
+##   &lt;fct&gt;  &lt;int&gt;    &lt;dbl&gt;         &lt;dbl&gt;
+## 1 female   466      339          72.8
+## 2 male     843      161          19.1</code></pre>
 </div>
 
 
